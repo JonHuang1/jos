@@ -88,7 +88,6 @@ void t_mchk();
 void t_simderr();
 
 void t_syscall();
-void t_default();
 
 void
 trap_init(void)
@@ -162,9 +161,9 @@ trap_init_percpu(void)
     // when we trap to the kernel
     int32_t i = cpunum();
     struct Taskstate tscurr= thiscpu->cpu_ts;
-    tscurr.ts_esp0 =  KSTACKTOP - i * (KSTKSIZE + KSTKGAP);
-    tscurr.ts_ss0 = GD_KD;
-    tscurr.ts_iomb = sizeof(struct Taskstate);
+    thiscpu->cpu_ts.ts_esp0 =  KSTACKTOP - i * (KSTKSIZE + KSTKGAP);
+   thiscpu->cpu_ts.ts_ss0 = GD_KD;
+    thiscpu->cpu_ts.ts_iomb = sizeof(struct Taskstate);
 
 
     // Initialize the TSS slot of the gdt.
@@ -234,7 +233,21 @@ trap_dispatch(struct Trapframe *tf)
 {
 	// Handle processor exceptions.
 	// LAB 3: Your code here.
-
+	if (tf->tf_trapno == T_PGFLT) {
+		page_fault_handler(tf);
+		return;
+	}
+	else if (tf->tf_trapno == T_BRKPT) {
+		monitor(tf);
+		return;
+	}
+	else if (tf->tf_trapno == T_SYSCALL) {
+			tf->tf_regs.reg_eax = syscall(tf->tf_regs.reg_eax,
+				tf->tf_regs.reg_edx, tf->tf_regs.reg_ecx, tf->tf_regs.reg_ebx,
+				tf->tf_regs.reg_edi, tf->tf_regs.reg_esi);
+				return;
+	}
+	// Unexpected trap: The user process or the kernel has a bug.
 	// Handle spurious interrupts
 	// The hardware sometimes raises these because of noise on the
 	// IRQ line or other reasons. We don't care.

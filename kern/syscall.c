@@ -274,11 +274,11 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 	// panic("syscall not implemented");
 	int32_t res = 0;
 	switch (syscallno) {
-		case SYS_env_destroy: res = sys_env_destroy((envid_t) a1);
-		case SYS_cgetc: res = sys_cgetc();
-		case SYS_getenvid: res = sys_getenvid();
-		case SYS_cputs: res = 0; sys_cputs((const char*) a1, (size_t) a2);
-		case SYS_yield: res = 0; sys_yield();
+		case SYS_env_destroy: res = sys_env_destroy((envid_t) a1); break;
+		case SYS_cgetc: res = sys_cgetc(); break;
+		case SYS_getenvid: res = sys_getenvid(); break;
+		case SYS_cputs: res = 0; sys_cputs((const char*) a1, (size_t) a2); break;
+		case SYS_yield: sys_yield(); break;
 		default: res =  -E_INVAL;
 	}
 	return res;

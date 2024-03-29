@@ -1,0 +1,500 @@
+    9  cd jos
+   10  make qemu-nox
+   11  cd jos
+   12  make qemu-nox
+   13  cd jos
+   14  make qemu-nox
+   15  cd jos
+   16  make qemu-nox
+   17  cd jos
+   18  make qemu-nox
+   19  cd jos
+   20  make qemu-nox
+   21  cd jos
+   22  make qemu-nox
+   23  cd jos;make qemu-nox
+   24  cd jos/
+   25  make qemu-nox
+   26  make qemu-nox
+   27  make qemu-nox
+   28  make qemu-nox
+   29  cd jos
+   30  make qemu-nox
+   31  cd jos/
+   32  make qemu-nox
+   33  cd jos
+   34  make qemu-nox
+   35  cd jos/
+   36  make qemu-nox
+   37  clear
+   38  make qemu-nox
+   39  make qemu-nox
+   40  clear
+   41  make qemu-nox
+   42  cd jos
+   43  make qemu-nox
+   44  cd jos
+   45  clear
+   46  make grade
+   47  clear
+   48  make grade
+   49  clear
+   50  make grade
+   51  make grade
+   52  clear
+   53  make grade
+   54  clear
+   55  make grade
+   56  clear
+   57  make grade
+   58  clear
+   59  make grade
+   60  maek grade
+   61  make grade
+   62  cleear
+   63  clear
+   64  make grade
+   65  make grade
+   66  make grade
+   67  clear
+   68  make grade
+   69  git push 
+   70  git push lab2 origin lab2
+   71  clear
+   72  cd ..
+   73  git push
+   74  clear
+   75  git add .
+   76  git commit -m "40/70"
+   77  git push
+   78  clear
+   79  git push
+   80  git commit -m "40/70"
+   81  clear
+   82  cd jos
+   83  git add .
+   84  git commit -m "40/70"
+   85  git push
+   86  git branch
+   87  git lab2 origin lab2
+   88  git push --set-upstream origin lab2
+   89  clear
+   90  make grade
+   91  make grade
+   92  make grade
+   93  make grade
+   94  make grade
+   95  git add .
+   96  git commit -m "Working but takes long"
+   97  git push
+   98  make clean
+   99  cd jos
+  100  clear
+  101  make clean
+  102  make handin
+  103  make hand-in
+  104  make handin
+  105  cd ,,
+  106  cd ..
+  107  make handin
+  108  cd jos
+  109  clear
+  110  make grade
+  111  celar
+  112  clear
+  113  make handin
+  114  clear
+  115  make clean
+  116  make add .
+  117  git add .
+  118  git commit -m "DONE"
+  119  make handin
+  120  git push
+  121  clear
+  122  make handin
+  123  cd ..
+  124  ls
+  125  cd ..
+  126  ls
+  127  git clone https://github.com/EE469/jos.git
+  128  rm -rf jos/
+  129  git clone https://github.com/EE469/jos.git
+  130  cd jos/
+  131  git remote -v
+  132  cd ..
+  133  cd OS_ece469/jos/
+  134  git remote -v
+  135  git remote rm origin
+  136  git remote -v
+  137  git remote add origin https://github.com/EE469/jos.git
+  138  git remote -v
+  139  make clean
+  140  make handin
+  141  git remote -v
+  142  git pull
+  143  git branch
+  144  make handin
+  145  git branch --set-upstream-to=origin/lab2 lab2
+  146  make handin
+  147  git pull
+  148  make handin
+  149  git remote -v
+  150  git remote rm origin
+  151  git remote add origin https://github.com/JonHuang1/jos.git
+  152  git remote -v
+  153  clear
+  154  make handin
+  155  git remote -v
+  156  make handin
+  157  git remote add upstream https://github.com/EE469/jos.git
+  158  git remote -v
+  159  make handin
+  160  cd ..
+  161  cd
+  162  cd jos/
+  163  ls
+  164  git branch
+  165  git checkout remote/lab2
+  166  git fetch
+  167  git branch
+  168  git branch -a
+  169  git pull remotes/origin/lab2
+  170  git fetch remotes/origin/lab2
+  171  git checkout remotes/origin/lab2
+  172  git branch
+  173  git switch -c lab2
+  174  git branch
+  175  git pull
+  176  git branch --set-upstream-to=origin/lab2 lab2
+  177  git pull
+  178  lw
+  179  ls
+  180  rm -rf ./
+  181  ls
+  182  rm -rf bios-256k.bin boot/ CODING conf/ efi-e1000.rom fs/ GNUmakefile grade-lab1  grade-lab2 gradelib.py inc/ kern/ kvmvapic.bin lib/ mergedep.pl user/ vgabios-stdvga.bin 
+  183  ls
+  184  cd ..
+  185  cd jos/
+  186  cp -r ../OS_ece469/jos/
+  187  cp -r ../OS_ece469/jos/ ./
+  188  ls
+  189  cd jos/
+  190  ls
+  191  cd ..
+  192  mv jos/* ./
+  193  ls
+  194  rm jos
+  195  rm -rf jos
+  196  ls
+  197  make grade
+  198  make clean
+  199  ls
+  200  code answers-lab2.txt 
+  201  make handin
+  202  git add .
+  203  git commit -m "DONE"
+  204  make handin
+  205  ls
+  206  code .
+  207  git pull
+  208  cd jos
+  209  clear
+  210  git pull
+  211  git branch
+  212  git pull origin lab3
+  213  git branch
+  214  clear
+  215  git stash
+  216  clear
+  217  git branch
+  218  git checkout lab3
+  219  git branch
+  220  clear
+  221  git pull
+  222  git branch
+  223  make grade
+  224  clear
+  225  make grade
+  226  clear
+  227  make grade
+  228  make grade
+  229  make grade
+  230  clear
+  231  make grade
+  232  clear
+  233  make grade
+  234  make grade
+  235  cd jos
+  236  clear
+  237  make grade
+  238  clear
+  239  make grade
+  240  make
+  241  clear
+  242  make grade
+  243  make grade
+  244  make 
+  245  make grade
+  246  cd jos
+  247  clear
+  248  make grade
+  249  make grade
+  250  cleaer
+  251  clear
+  252  git pull
+  253  git stash
+  254  clear
+  255  git pull
+  256  clear
+  257  make grade
+  258  cd jos
+  259  clear
+  260  make grade
+  261  make grade
+  262  make grade
+  263  make grade
+  264  make grade
+  265  make grade
+  266  clear
+  267  make grade
+  268  make grade
+  269  make grade
+  270  make grade
+  271  make grade
+  272  make grade
+  273  clear
+  274  make grade
+  275  make grade
+  276  make grade
+  277  make grade
+  278  make grade
+  279  make grade
+  280  make grade
+  281  make grade
+  282  make grade
+  283  make grade
+  284  make grade
+  285  make grade
+  286  make grade
+  287  make grade
+  288  clear
+  289  make grade
+  290  make grade
+  291  CLEAR
+  292  clear
+  293  make grade
+  294  CLEAR
+  295  clear
+  296  make grade
+  297  clear
+  298  make grade
+  299  git push
+  300  git add .
+  301  git push
+  302  git commit -m "75/80"
+  303  git push
+  304  make grade
+  305  cd jos
+  306  clear
+  307  make grade
+  308  clear
+  309  make grade
+  310  clear
+  311  make clean
+  312  clear
+  313  git add .
+  314  git commit -m "Added text answers"
+  315  git push 
+  316  ssh socet147@asicfabu
+  317  history > hist
+  318  ./build/ECE565-ARM/gem5.opt configs/example/se.py --cpu-type=MinorCPU --maxinsts=1000000 --l1d_size=64kB --l1i_size=16kB --caches --l2cache -c part1/daxpy-armv7-binary
+  319  export LD_LIBARY_PATH=/package/gcc/8.3.0/lib64:$LD_LIBARAY_PATH
+  320  export PATH=/package/gcc/8.3.0/bin:$PATH
+  321  ./build/ECE565-ARM/gem5.opt configs/example/se.py --cpu-type=MinorCPU --maxinsts=1000000 --l1d_size=64kB --l1i_size=16kB --caches --l2cache -c part1/daxpy-armv7-binary
+  322  make qemu-nox-gdb
+  323  gdb
+  324  clear
+  325  objdump -h obj/kern/kernel
+  326  q
+  327  clear
+  328  make
+  329  clear
+  330  tmux -l
+  331  tmux ls
+  332  % objdump -i
+  333  % objdump -i
+  334  objdump -i
+  335  clear
+  336  gcc -m32 -print-libgcc-file-name
+  337  sudo apt-get install gcc-multilib
+  338  clear
+  339  git branch
+  340  cd jos
+  341  clear
+  342  git branh
+  343  git branch
+  344  clear
+  345  git pull branch4
+  346  clear
+  347  git pull 
+  348  clear
+  349  git branch
+  350  git branch --track <branch-name> origin/
+  351  clear
+  352  git pull origin lab4
+  353  clear
+  354  git pull 
+  355  clear
+  356   make grade
+  357  clear
+  358   make grade
+  359  clear
+  360  make grade
+  361  clear
+  362  make grade
+  363  make grade
+  364  cd jos
+  365  make grade
+  366  make grade
+  367  clear
+  368  make grade
+  369  make grade
+  370  clear
+  371  make grade
+  372  clear
+  373  make grade
+  374  make grade
+  375  make grade\
+  376  make grade\
+  377  make grade
+  378  clear
+  379  make grade
+  380  make grade
+  381  clear
+  382  make grade
+  383  make grade
+  384  clear
+  385  make grade
+  386  make grade
+  387  make grade
+  388  clear
+  389  make grade
+  390  make qemu-nox
+  391  git add --all;git commit -m "2,3 Done"
+  392  cd jos
+  393  git add --all;git commit -m "2,3 Done"
+  394  git config --global --edit
+  395  git config --global --edit
+  396      git commit --amend --reset-author
+  397   git config --global user.name "SudhanvaD"
+  398   git config --global user.email sudhanva7403@gmail.com
+  399  clear
+  400  git add --all;git commit -m "2,3 Done"
+  401  git branch
+  402  clear
+  403  git checkout lab4
+  404  clear
+  405  make grade
+  406  clear
+  407  git branch lab3
+  408  git checkout lab3
+  409  clear
+  410  git branch
+  411  git checkout lab4
+  412  clear
+  413  git pull
+  414  clear
+  415  make qumeu-nox
+  416  make qmeu-nox
+  417  make qemu-nox
+  418  cd jos
+  419  make qemu-nox
+  420  cd jos
+  421  clear
+  422  git branch
+  423  git add --all
+  424  git commit "Got 2,3,4 working"
+  425  git commit -m "Got 2,3,4 working"
+  426  git push
+  427  make grade
+  428  cd jo
+  429  cd jos
+  430  clear
+  431  git branch
+  432  git pull
+  433  clear
+  434  clear
+  435  make qmeu CPUS=4
+  436  make qemu CPUS=4
+  437  git stash
+  438  clear
+  439  cd jos
+  440  clear
+  441  git stash
+  442  clear
+  443  git pull
+  444  clear
+  445  make grade
+  446  clear
+  447  make qemu CPUS=4
+  448  cd jos
+  449  clear
+  450  make qemu CPUS=4
+  451  cd jos
+  452  clear
+  453  make clean
+  454  clear
+  455  make qemu CPUS=3
+  456  cd jos
+  457  clear
+  458  make qemu CPUS=3 
+  459  cd jps
+  460  cd jos
+  461  clear
+  462  make qemu CPUS=3
+  463  cd jos
+  464  clear
+  465  make clean
+  466  clear
+  467  make qemu CPUS=3 
+  468  cd jos
+  469  clear
+  470  make clean
+  471  clear
+  472  make qemu CPUS=3
+  473  cd jps
+  474  cd jos
+  475  clear
+  476  make qemu CPUS=3
+  477  cd jos
+  478  clear
+  479  make clean
+  480  clear
+  481  make
+  482  clear
+  483  make qemu CPUS=3
+  484  cd jps
+  485  clear
+  486  cd jos
+  487  clear
+  488  tmux new -s debug-qemu
+  489  cd jos
+  490  tmux new -s debug-gdb
+  491  gdb
+  492  clear
+  493  gdb
+  494  clear
+  495  make qemu-nox-gdb
+  496  cd jos
+  497  objdump -d -S obj/kern/kernel > kernel.asm
+  498  grep "00800b37" kernel.asm
+  499  cd obj/kern/kernel
+  500  tmux new -s debug-gdb
+  501  clear
+  502  cd jos
+  503  clear
+  504  make
+  505  clear
+  506  make
+  507  make qemu
+  508  history > hist
