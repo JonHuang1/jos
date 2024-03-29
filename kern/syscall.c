@@ -82,9 +82,14 @@ sys_exofork(void)
 	// status is set to ENV_NOT_RUNNABLE, and the register set is copied
 	// from the current environment -- but tweaked so sys_exofork
 	// will appear to return 0.
-
+	
 	// LAB 4: Your code here.
-	panic("sys_exofork not implemented");
+	struct Env * env;
+	int new_env = env_alloc(&env,curenv->env_id);
+	env->env_status = ENV_NOT_RUNNABLE;
+	env->env_tf = curenv->env_tf;
+	env->env_tf.tf_regs.reg_eax = 0;
+	return env->env_id;
 }
 
 // Set envid's env_status to status, which must be ENV_RUNNABLE
@@ -102,9 +107,13 @@ sys_env_set_status(envid_t envid, int status)
 	// You should set envid2env's third argument to 1, which will
 	// check whether the current environment has permission to set
 	// envid's status.
+	
 
 	// LAB 4: Your code here.
-	panic("sys_env_set_status not implemented");
+	struct Env * env;
+	int res = envid2env(envid,&env,1);
+	env->env_status = status;
+	return 0;
 }
 
 // Set the page fault upcall for 'envid' by modifying the corresponding struct
@@ -149,7 +158,11 @@ sys_page_alloc(envid_t envid, void *va, int perm)
 	//   allocated!
 
 	// LAB 4: Your code here.
-	panic("sys_page_alloc not implemented");
+	struct Env* env = NULL;
+	int res = envid2env(envid, &env, 1);
+	struct PageInfo* page = page_alloc(ALLOC_ZERO);
+	page_insert(env->env_pgdir, page, va, perm);
+	return 0;
 }
 
 // Map the page of memory at 'srcva' in srcenvid's address space
@@ -180,7 +193,13 @@ sys_page_map(envid_t srcenvid, void *srcva,
 	//   check the current permissions on the page.
 
 	// LAB 4: Your code here.
-	panic("sys_page_map not implemented");
+	struct Env* src = NULL;
+	int res1 = envid2env(srcenvid, &src, 1);
+	struct Env* dst = NULL;
+	int res2 = envid2env(dstenvid, &dst, 1);
+	pte_t* pte;
+	struct PageInfo* srcpage = page_lookup(src->env_pgdir, srcva, &pte);
+	return page_insert(dst->env_pgdir, srcpage, dstva, perm);
 }
 
 // Unmap the page of memory at 'va' in the address space of 'envid'.
@@ -196,7 +215,10 @@ sys_page_unmap(envid_t envid, void *va)
 	// Hint: This function is a wrapper around page_remove().
 
 	// LAB 4: Your code here.
-	panic("sys_page_unmap not implemented");
+	struct Env* env = NULL;
+	int res = envid2env(envid, &env, 1);
+	page_remove(env->env_pgdir, va);
+	return 0;
 }
 
 // Try to send 'value' to the target env 'envid'.
@@ -276,7 +298,12 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 	switch (syscallno) {
 		case SYS_env_destroy: res = sys_env_destroy((envid_t) a1); break;
 		case SYS_cgetc: res = sys_cgetc(); break;
+		case SYS_page_map: return sys_page_map((envid_t)a1, (void*)a2, (envid_t)a3, (void*) a4, a5); ; break;
+		case SYS_page_unmap: return sys_page_unmap((envid_t)a1, (void*)a2); break;
+		case SYS_env_set_status: return sys_env_set_status((envid_t) a1, a2);
+		case SYS_page_alloc: return sys_page_alloc((envid_t) a1, (void*) a2, a3);break;
 		case SYS_getenvid: res = sys_getenvid(); break;
+		case SYS_exofork: return sys_exofork();  break;
 		case SYS_cputs: res = 0; sys_cputs((const char*) a1, (size_t) a2); break;
 		case SYS_yield: sys_yield(); break;
 		default: res =  -E_INVAL;
