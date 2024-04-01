@@ -126,11 +126,12 @@ trap_init(void)
 	SETGATE(idt[T_MCHK], 0, GD_KT, t_mchk, 0);
 	SETGATE(idt[T_SIMDERR], 0, GD_KT, t_simderr, 0);
 	SETGATE(idt[T_SYSCALL], 0, GD_KT, t_syscall, 3);
-	SETGATE(idt[IRQ_OFFSET + IRQ_TIMER], 0, GD_KT, irq_timer, 0);
 
-	// for (int i=0; i<16; i++) {
-	// 	SETGATE(idt[IRQ_OFFSET + i], 0, GD_KT, irq_error, 0);
-	// }
+	for (int i=0; i<16; i++) {
+		SETGATE(idt[IRQ_OFFSET + i], 0, GD_KT, irq_error, 0);
+	}
+	
+	SETGATE(idt[IRQ_OFFSET + IRQ_TIMER], 0, GD_KT, irq_timer, 0);
 
 	// Per-CPU setup
 	trap_init_percpu();
