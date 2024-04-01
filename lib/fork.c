@@ -46,8 +46,8 @@ pgfault(struct UTrapframe *utf)
 	if ((r = sys_page_alloc(0, PFTEMP, PTE_P | PTE_W | PTE_U)) < 0) {
         panic("pgfault: sys_page_alloc failed: %e", r);
     }
-	memcpy(PFTEMP, addr, PGSIZE);
-	if ((r = sys_page_map(0, PFTEMP, 0, addr, PTE_P | PTE_W | PTE_U)) < 0) {
+	memcpy(PFTEMP, ROUNDDOWN(addr, PGSIZE), PGSIZE);
+	if ((r = sys_page_map(0, PFTEMP, 0, ROUNDDOWN(addr, PGSIZE), PTE_P | PTE_W | PTE_U)) < 0) {
         panic("pgfault: sys_page_map failed: %e", r);
     }
     if ((r = sys_page_unmap(0, PFTEMP)) < 0) {
