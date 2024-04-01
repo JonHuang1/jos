@@ -266,6 +266,7 @@ static int
 sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, unsigned perm)
 {
 	// LAB 4: Your code here.
+	panic("sys_ipc_");
 }
 
 // Block until a value is ready.  Record that you want to receive
@@ -283,13 +284,14 @@ static int
 sys_ipc_recv(void *dstva)
 {
 	// LAB 4: Your code here.
-	if (dstva < UTOP && ROUNDUP(dstva, PGSIZE) != dstva) {
-		return -E_INVAL;
-	}
+	// if ((uint32_t) dstva < UTOP && ROUNDUP(dstva, PGSIZE) != dstva) {
+	// 	return -E_INVAL;
+	// }
 
-	curenv->env_ipc_recving = 1;
-	curenv->env_ipc_dstva = dstva;
-	curenv->env_status = ENV_NOT_RUNNABLE;
+	// curenv->env_ipc_recving = 1;
+	// curenv->env_ipc_dstva = dstva;
+	// curenv->env_status = ENV_NOT_RUNNABLE;
+	panic("ipc_rec");
 
 	return 0;
 }
