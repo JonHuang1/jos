@@ -266,7 +266,14 @@ static int
 sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, unsigned perm)
 {
 	// LAB 4: Your code here.
-	panic("sys_ipc_");
+	
+	struct Env* env = NULL;
+	int res = envid2env(envid, &env, 1);
+	env->env_ipc_recving = 0;
+	env->env_ipc_from = envid;
+	env->env_ipc_value = value;
+	env->env_ipc_perm = perm;
+	return 0;
 }
 
 // Block until a value is ready.  Record that you want to receive
@@ -288,10 +295,10 @@ sys_ipc_recv(void *dstva)
 	// 	return -E_INVAL;
 	// }
 
-	// curenv->env_ipc_recving = 1;
-	// curenv->env_ipc_dstva = dstva;
-	// curenv->env_status = ENV_NOT_RUNNABLE;
-	panic("ipc_rec");
+	curenv->env_ipc_recving = 1;
+	curenv->env_ipc_dstva = dstva;
+	curenv->env_status = ENV_NOT_RUNNABLE;
+	sys_yield();
 
 	return 0;
 }
