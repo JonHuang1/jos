@@ -53,7 +53,6 @@ pgfault(struct UTrapframe *utf)
     if ((r = sys_page_unmap(0, PFTEMP)) < 0) {
         panic("pgfault: sys_page_unmap failed: %e", r);
     }
-	panic("pgfault not implemented");
 }
 
 //
@@ -88,8 +87,6 @@ duppage(envid_t envid, unsigned pn)
             panic("duppage: sys_page_map for read-only page failed: %e", r);
         }
     }
-
-	panic("duppage not implemented");
 	return 0;
 }
 
