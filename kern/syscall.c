@@ -306,9 +306,10 @@ sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, unsigned perm)
 		env->env_ipc_perm = 0;
 	}
 	env->env_ipc_recving = 0;
-	env->env_ipc_from = envid;
+	env->env_ipc_from = curenv->env_id;
 	env->env_ipc_value = value;
 	env->env_status = ENV_RUNNABLE;
+	env->env_tf.tf_regs.reg_eax = 0;
 	return 0;
 }
 
@@ -360,7 +361,9 @@ syscall(uint32_t syscallno, uint32_t a1, uint32_t a2, uint32_t a3, uint32_t a4, 
 		case SYS_exofork: return sys_exofork();  break;
 		case SYS_cputs: res = 0; sys_cputs((const char*) a1, (size_t) a2); break;
 		case SYS_yield: sys_yield(); break;
-		case SYS_env_set_pgfault_upcall: return sys_env_set_pgfault_upcall((envid_t)a1, (void*)a2);
+		case SYS_ipc_recv: return sys_ipc_recv((void*)a1);
+		case SYS_ipc_try_send: return sys_ipc_try_send((envid_t) a1, a2, (void*) a3, a4);
+		case SYS_env_set_pgfault_upcall: return sys_env_set_pgfault_upcall((envid_t)a1,(void*)a2);
 		default: res =  -E_INVAL;
 	}
 	return res;
