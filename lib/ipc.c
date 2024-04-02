@@ -23,18 +23,18 @@ int32_t
 ipc_recv(envid_t *from_env_store, void *pg, int *perm_store)
 {
 	// LAB 4: Your code here.
-	
-	if (pg != NULL) {
-		int r = sys_ipc_recv(pg);
-		thisenv->env_ipc_value
-	}
-	if (from_env_store != NULL) {
-		*from_env_store = thisenv->env_id;
-	}
-	if (perm_store != NULL) {
-		*perm_store = thisenv->env_ipc_perm;
-	}
-	return thisenv->env_ipc_value;
+	void* recv_pg = pg ? pg : (void*)UTOP;
+    int receive_status = sys_ipc_recv(recv_pg);
+    if (receive_status == 0) {
+        if (from_env_store != NULL) {
+            *from_env_store = thisenv->env_ipc_from;
+        }
+        if (perm_store != NULL) {
+            *perm_store = thisenv->env_ipc_perm;
+        }
+        return thisenv->env_ipc_value;
+    }
+    return receive_status;
 }
 
 // Send 'val' (and 'pg' with 'perm', if 'pg' is nonnull) to 'toenv'.
@@ -49,22 +49,15 @@ void
 ipc_send(envid_t to_env, uint32_t val, void *pg, int perm)
 {
 	// LAB 4: Your code here.
-	int r;
-	while(true) {
-		if (pg == NULL) {
-			int r = sys_ipc_try_send(to_env, val, (void *) KERNBASE, perm);
-		}
-		else {
-			int r = sys_ipc_try_send(to_env, val, pg, perm);
-		}
-		if (!r) {
+	int r = -E_IPC_NOT_RECV;
+	while (true) {
+		r = sys_ipc_try_send(to_env, val, pg ? pg : (void*) UTOP, perm);
+		sys_yield();
+		if (r != -E_IPC_NOT_RECV) {
 			break;
-		}
-		else if (r == -E_IPC_NOT_RECV) {
-			sys_yield();
-		}
-		else {
-			panic("ipc send failed");
+			if (r !=0 ) {
+				panic("ipc_send failed with error: %e\n", r);
+			}	
 		}
 	}
 
