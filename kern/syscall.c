@@ -268,11 +268,47 @@ sys_ipc_try_send(envid_t envid, uint32_t value, void *srcva, unsigned perm)
 	// LAB 4: Your code here.
 	
 	struct Env* env = NULL;
-	int res = envid2env(envid, &env, 1);
+	int res = envid2env(envid, &env, 0);
+	if (res < 0) {
+		return -E_BAD_ENV;
+	}
+	else if (!env->env_ipc_recving) {
+		return -E_IPC_NOT_RECV;
+	}
+	else if ((uintptr_t) srcva < UTOP) {
+		if (ROUNDDOWN(srcva, PGSIZE) != srcva) {
+			return -E_INVAL;
+		}
+		else if ((perm & ~PTE_SYSCALL) != 0) {
+			return -E_INVAL;
+		}
+		else {
+			pte_t* pte;
+			struct PageInfo* page = page_lookup(curenv->env_pgdir, srcva, &pte);
+			if (page < 0) {
+				return -E_INVAL;
+			}
+			else if ((perm & PTE_W) && !(*pte & PTE_W)) {
+				return -E_INVAL;
+			}
+			else if (env->env_ipc_dstva < (void *) UTOP) {
+				if (page_insert(env->env_pgdir, page, env->env_ipc_dstva, perm) < 0) {
+					return -E_NO_MEM;
+				}
+				env->env_ipc_perm = perm;
+			}
+			else {
+				env->env_ipc_perm = 0;
+			}
+		}
+	}
+	else {
+		env->env_ipc_perm = 0;
+	}
 	env->env_ipc_recving = 0;
 	env->env_ipc_from = envid;
 	env->env_ipc_value = value;
-	env->env_ipc_perm = perm;
+	env->env_status = ENV_RUNNABLE;
 	return 0;
 }
 
@@ -291,9 +327,9 @@ static int
 sys_ipc_recv(void *dstva)
 {
 	// LAB 4: Your code here.
-	// if ((uint32_t) dstva < UTOP && ROUNDUP(dstva, PGSIZE) != dstva) {
-	// 	return -E_INVAL;
-	// }
+	if ((uint32_t) dstva < UTOP && ROUNDUP(dstva, PGSIZE) != dstva) {
+		return -E_INVAL;
+	}
 
 	curenv->env_ipc_recving = 1;
 	curenv->env_ipc_dstva = dstva;
