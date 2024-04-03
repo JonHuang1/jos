@@ -399,16 +399,12 @@ page_fault_handler(struct Trapframe *tf)
         struct UTrapframe *utf;
         uintptr_t utf_addr;
 
-        // Check if we are already on the user exception stack
+       
         if (tf->tf_esp < UXSTACKTOP && tf->tf_esp >= UXSTACKTOP - PGSIZE) {
-            // Recursive page fault, adjust stack accordingly
-            utf_addr = tf->tf_esp - sizeof(struct UTrapframe) - 4; // Leave 4 bytes of scratch space
+            utf_addr = tf->tf_esp - sizeof(struct UTrapframe) - 4; 
         } else {
-            // Not a recursive page fault, use UXSTACKTOP
             utf_addr = UXSTACKTOP - sizeof(struct UTrapframe);
         }
-
-        // Ensure the new user trap frame address is safe
         user_mem_assert(curenv, (void *)utf_addr, sizeof(struct UTrapframe), PTE_W);
 
         utf = (struct UTrapframe *)utf_addr;

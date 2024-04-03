@@ -84,8 +84,13 @@ sys_exofork(void)
 	// will appear to return 0.
 	
 	// LAB 4: Your code here.
-	struct Env * env;
+	struct Env * env = NULL;
+	
 	int new_env = env_alloc(&env,curenv->env_id);
+	if (new_env < 0) {
+		
+		return new_env;
+	}
 	env->env_status = ENV_NOT_RUNNABLE;
 	env->env_tf = curenv->env_tf;
 	env->env_tf.tf_regs.reg_eax = 0;
@@ -107,11 +112,16 @@ sys_env_set_status(envid_t envid, int status)
 	// You should set envid2env's third argument to 1, which will
 	// check whether the current environment has permission to set
 	// envid's status.
-	
-
 	// LAB 4: Your code here.
-	struct Env * env;
-	int res = envid2env(envid,&env,1);
+	if (status != ENV_NOT_RUNNABLE && status != ENV_RUNNABLE) {
+        return -E_INVAL; 
+    }
+	struct Env *env;
+    int res = envid2env(envid, &env, 1);
+    if (res < 0) {
+        return res; 
+    }
+
 	env->env_status = status;
 	return 0;
 }
@@ -130,6 +140,9 @@ sys_env_set_pgfault_upcall(envid_t envid, void *func)
 	// LAB 4: Your code here.
 	struct Env * env;
 	int res = envid2env(envid,&env,1);
+	if (res < 0) {
+		return res;
+	}
 	env->env_pgfault_upcall = func;
 	return 0;
 }
@@ -160,11 +173,28 @@ sys_page_alloc(envid_t envid, void *va, int perm)
 	//   If page_insert() fails, remember to free the page you
 	//   allocated!
 
-	// LAB 4: Your code here.
+	// LAB 4: Your code here
+	if ((perm & (PTE_U | PTE_P)) != (PTE_U | PTE_P) || (perm & ~PTE_SYSCALL)) {
+        return -E_INVAL; 
+    }
+	uintptr_t vaddr = (uintptr_t)va;
+	if ( (vaddr >= UTOP) || (vaddr % PGSIZE != 0)) {
+        return -E_INVAL; 
+    }
 	struct Env* env = NULL;
 	int res = envid2env(envid, &env, 1);
 	struct PageInfo* page = page_alloc(ALLOC_ZERO);
-	page_insert(env->env_pgdir, page, va, perm);
+	int err = page_insert(env->env_pgdir, page, va, perm);
+	if (res < 0) {
+        return res;
+	}
+	if (!page) {
+        return -E_NO_MEM;
+    }
+	if (err < 0) {
+        page_free(page); 
+        return res; 
+    }
 	return 0;
 }
 
@@ -196,13 +226,39 @@ sys_page_map(envid_t srcenvid, void *srcva,
 	//   check the current permissions on the page.
 
 	// LAB 4: Your code here.
+	if ((perm & (PTE_U | PTE_P)) != (PTE_U | PTE_P) || (perm & ~PTE_SYSCALL)) {
+        return -E_INVAL; 
+	}
+	uintptr_t srcva_addr = (uintptr_t)srcva;
+	uintptr_t dstva_addr = (uintptr_t)dstva;
+
+	if ((srcva_addr  >= UTOP) || (srcva_addr  % PGSIZE) != 0 ||
+        (dstva_addr >= UTOP) || (dstva_addr% PGSIZE != 0) ){
+        return -E_INVAL; // Return an error if addresses are invalid.
+    }
 	struct Env* src = NULL;
 	int res1 = envid2env(srcenvid, &src, 1);
 	struct Env* dst = NULL;
 	int res2 = envid2env(dstenvid, &dst, 1);
+	if (res1 < 0) {
+        return -E_BAD_ENV; 
+    }
+	if (res2 < 0) {
+        return -E_BAD_ENV; 
+    }
 	pte_t* pte;
 	struct PageInfo* srcpage = page_lookup(src->env_pgdir, srcva, &pte);
-	return page_insert(dst->env_pgdir, srcpage, dstva, perm);
+	if (!srcpage) {
+        return -E_INVAL; // Source page is not mapped.
+    }
+	if ((perm & PTE_W) && !(*pte & PTE_W)) {
+        return -E_INVAL; 
+    }
+	int result = page_insert(dst->env_pgdir, srcpage, dstva, perm);
+	if (result < 0) {
+		return -E_NO_MEM;
+	}
+	return 0;
 }
 
 // Unmap the page of memory at 'va' in the address space of 'envid'.
@@ -220,6 +276,13 @@ sys_page_unmap(envid_t envid, void *va)
 	// LAB 4: Your code here.
 	struct Env* env = NULL;
 	int res = envid2env(envid, &env, 1);
+	if (res < 0) {
+		return res;
+	}
+	if ((uintptr_t) va >= UTOP || ROUNDDOWN(va, PGSIZE) != va) {
+		return -E_INVAL;
+	}
+
 	page_remove(env->env_pgdir, va);
 	return 0;
 }

@@ -1,4 +1,5 @@
 1. MBOOTPHYS calculates the absolute address of its symbols. Necessary in mpentry.S and not boot.S because boot.S runs from start and mpentry.S's address will be moved away from KERNBASE so that must be accounted for.
 2. Different CPU stacks can have different function calls and have different values. If a shared stack were to be used, there could be concurrency issues with multiple CPU's trying to access the stack as well as potential stack overflows due to the limited stack space.
+Also this coud incurr serious security risks, if a there is kernal code running, user code could cause a stackoverflow and put the sytem at a security risk.
 3. Before and after the addressing switch, e refers to the same address that is not affected by lcr3()
-4. This is done so the environment can be restored. It happens in trap.c: "curenv->env_tf = *tf"
+4. This is done so the environment can be restored, and switch between different environments. It happens in trap.c: "curenv->env_tf = *tf"

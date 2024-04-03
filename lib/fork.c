@@ -79,12 +79,12 @@ duppage(envid_t envid, unsigned pn)
             panic("duppage: sys_page_map failed: %e", r);
         }
         if ((r = sys_page_map(0, addr, 0, addr, PTE_P | PTE_U | PTE_COW)) < 0) {
-            panic("duppage: sys_page_map (self) failed: %e", r);
+            panic("duppage: sys_page_map failed: %e", r);
         }
     } else {
 
         if ((r = sys_page_map(0, addr, envid, addr,PTE_P | PTE_U )) < 0) {
-            panic("duppage: sys_page_map for read-only page failed: %e", r);
+            panic("duppage: sys_page_map failed: %e", r);
         }
     }
 	return 0;
@@ -135,17 +135,17 @@ fork(void)
     }
 
     if ((r = sys_page_alloc(envid, (void *)(UXSTACKTOP - PGSIZE), PTE_P | PTE_W | PTE_U)) < 0) {
-        panic("sys_page_alloc: %e", r);
+        return r;
     }
 
 
     if ((r = sys_env_set_pgfault_upcall(envid, _pgfault_upcall)) < 0) {
-        panic("sys_env_set_pgfault_upcall: %e", r);
+        return r;
     }
 
 
     if ((r = sys_env_set_status(envid, ENV_RUNNABLE)) < 0) {
-        panic("sys_env_set_status: %e", r);
+       return r;
     }
 
     return envid;
