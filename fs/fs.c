@@ -62,7 +62,14 @@ alloc_block(void)
 	// super->s_nblocks blocks in the disk altogether.
 
 	// LAB 5: Your code here.
-	panic("alloc_block not implemented");
+	// panic("alloc_block not implemented");
+	for (int block=0; block<super->s_nblocks; block++) {
+		if (block_is_free(block)) {
+			bitmap[block/32] -= 1<<(block%32);
+			flush_block(diskaddr(block));
+			return block;
+		}
+	}
 	return -E_NO_DISK;
 }
 
@@ -134,8 +141,9 @@ fs_init(void)
 static int
 file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool alloc)
 {
-       // LAB 5: Your code here.
-       panic("file_block_walk not implemented");
+  // LAB 5: Your code here.
+  //  panic("file_block_walk not implemented");
+	
 }
 
 // Set *blk to the address in memory where the filebno'th
