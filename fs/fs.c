@@ -143,7 +143,34 @@ file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool all
 {
   // LAB 5: Your code here.
   //  panic("file_block_walk not implemented");
-	
+
+	if (filebno >= NDIRECT + NINDIRECT) {
+		return -E_INVAL;
+	}
+
+	if (filebno < NDIRECT) {
+		*ppdiskbno = &(f->f_direct[filebno]);
+		return 0;
+	}
+
+	if (!f->f_indirect && !alloc) {
+		return -E_NOT_FOUND;
+	}
+
+	if (!f->f_indirect) {
+		int block = alloc_block();
+		if (block < 0) {
+			return -E_NO_DISK;
+		}
+		else {
+			memset(diskaddr(f->f_indirect), 0, BLKSIZE);
+			f->f_indirect = block;
+		}
+	}
+
+	*ppdiskbno = (uint32_t *) diskaddr(f->f_indirect) + (filebno - NDIRECT);
+	return 0;
+
 }
 
 // Set *blk to the address in memory where the filebno'th
@@ -157,8 +184,27 @@ file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool all
 int
 file_get_block(struct File *f, uint32_t filebno, char **blk)
 {
-       // LAB 5: Your code here.
-       panic("file_get_block not implemented");
+	// LAB 5: Your code here.
+	// panic("file_get_block not implemented");
+	if (filebno >= NDIRECT + NINDIRECT) {
+		return -E_INVAL;
+	}
+
+	uint32_t *ppdiskbno;
+	int r;
+
+	if ((r = file_block_walk(f, filebno, &ppdiskbno, 1)) < 0) {
+		return r;
+	}
+	if (!(*ppdiskbno)) {
+		r = alloc_block();
+		if (r < 0) {
+			return -E_NO_DISK;
+		}
+		*ppdiskbno = r;
+	}
+	*blk = diskaddr(*ppdiskbno);
+	return 0;
 }
 
 // Try to find a file named "name" in dir.  If so, set *file to it.
