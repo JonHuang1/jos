@@ -244,21 +244,23 @@ serve_write(envid_t envid, struct Fsreq_write *req)
 
 	// LAB 5: Your code here.
 	// panic("serve_write not implemented");
-	struct OpenFile *ofile;
+
 	int r;
+	struct OpenFile *fileObj;
 
-	if ((r = openfile_lookup(envid, req->req_fileid, &ofile)) < 0) {
-		return r;
+	r = openfile_lookup(envid, req->req_fileid, &fileObj);
+	if (r < 0) {
+    	return r;  
 	}
 
-	if ((r = file_write(ofile->o_file, req->req_buf, req->req_n, ofile->o_fd->fd_offset)) < 0) {
-		return r;
+	int towr = MIN(req->req_n, BLKSIZE);  
+	r = file_write(fileObj->o_file, req->req_buf, towr, fileObj->o_fd->fd_offset);
+	if (r < 0) {
+    	return r;  
 	}
-	else {
-		ofile->o_fd->fd_offset += r;
-	}
-	
+	fileObj->o_fd->fd_offset += r;
 	return r;
+
 }
 
 // Stat ipc->stat.req_fileid.  Return the file's struct Stat to the

@@ -158,12 +158,16 @@ file_block_walk(struct File *f, uint32_t filebno, uint32_t **ppdiskbno, bool all
 	}
 
 	if (!f->f_indirect) {
+		if (!alloc) {
+			return -E_NOT_FOUND;
+		}
 		int block = alloc_block();
 		if (block < 0) {
 			return -E_NO_DISK;
 		}
 		else {
-			memset(diskaddr(f->f_indirect), 0, BLKSIZE);
+			memset(diskaddr(block), 0, BLKSIZE);
+			flush_block(diskaddr(block));
 			f->f_indirect = block;
 		}
 	}
@@ -201,6 +205,8 @@ file_get_block(struct File *f, uint32_t filebno, char **blk)
 		if (r < 0) {
 			return -E_NO_DISK;
 		}
+		memset(diskaddr(r), 0, BLKSIZE);
+		flush_block(diskaddr(r));
 		*ppdiskbno = r;
 	}
 	*blk = diskaddr(*ppdiskbno);

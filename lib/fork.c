@@ -73,8 +73,11 @@ duppage(envid_t envid, unsigned pn)
 
 	void *addr = (void *)(pn * PGSIZE);
     pte_t pte = uvpt[pn];
-
-    if (pte & (PTE_W | PTE_COW)) {
+    if (pte & PTE_SHARE) {
+        if ((r = sys_page_map(0, addr, envid, addr, pte &  PTE_SYSCALL)) < 0)
+            panic("duppage: sys_page_map failed: %e", r);
+    }
+    else if (pte & (PTE_W | PTE_COW)) {
         if ((r = sys_page_map(0, addr, envid, addr, PTE_P | PTE_U | PTE_COW)) < 0) {
             panic("duppage: sys_page_map failed: %e", r);
         }

@@ -1,4 +1,3 @@
-
 #include "fs.h"
 
 struct Super *super;
@@ -51,10 +50,10 @@ bc_pgfault(struct UTrapframe *utf)
 	// the disk.
 	//
 	// LAB 5: you code here:
-	if ((r = sys_page_alloc(thisenv->env_id, ROUNDUP(addr, PGSIZE), PTE_P | PTE_U | PTE_W)) < 0)
+	if ((r = sys_page_alloc(thisenv->env_id,  ROUNDDOWN(addr, PGSIZE), PTE_P | PTE_U | PTE_W)) < 0)
 		panic("in bc_pgfault, sys_page_alloc: %e", r);
 
-	if ((r = ide_read(BLKSECTS * blockno, ROUNDUP(addr, PGSIZE), BLKSECTS) < 0))
+	if ((r = ide_read(BLKSECTS * blockno,  ROUNDDOWN(addr, PGSIZE), BLKSECTS) < 0))
 		panic("in bc_pgfault, ide_read: %e", r);
 
 	// Clear the dirty bit for the disk block page since we just read the
@@ -87,13 +86,13 @@ flush_block(void *addr)
 	// LAB 5: Your code here.
 	int r;
 
-	if ((r = va_is_mapped(addr)) < 0)
+	if ((!va_is_mapped(addr)))
 		return;
-	if ((r = va_is_dirty(addr)) < 0)
+	if ((!va_is_dirty(addr)))
 		return;
 	if ((r = ide_write(BLKSECTS*blockno, ROUNDDOWN(addr, PGSIZE), BLKSECTS)) < 0)
 		panic("in flush_block, ide_block: %e", r);
-	if ((r = sys_page_map(0, ROUNDDOWN(addr, PGSIZE), 0, ROUNDDOWN(addr, PGSIZE), uvpt[PGNUM(addr)] & PTE_SYSCALL)) < 0)
+	if ((r = sys_page_map(0, ROUNDDOWN(addr, PGSIZE), 0, ROUNDDOWN(addr, PGSIZE), PTE_U | PTE_P | PTE_W | PTE_SYSCALL)) < 0)
 		panic("in flush_block, sys_page_map error: %e", r);
 	
 	// panic("flush_block not implemented");

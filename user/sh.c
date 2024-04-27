@@ -46,6 +46,19 @@ again:
 				cprintf("syntax error: < not followed by word\n");
 				exit();
 			}
+			if ((fd = open(t, O_RDONLY)) < 0) {
+        		cprintf("open %s for read failed: %e", t, fd);
+        		exit();
+    		}
+			if (fd != 0) {
+        		if (dup(fd, 0) < 0) {
+           		 	cprintf("dup2 failed: cannot duplicate fd %d onto 0\n", fd);
+            		close(fd);
+            		exit();
+       		 	}
+        		close(fd);
+    		}
+
 			// Open 't' for reading as file descriptor 0
 			// (which environments use as standard input).
 			// We can't open a file onto a particular descriptor,
@@ -55,7 +68,6 @@ again:
 			// then close the original 'fd'.
 
 			// LAB 5: Your code here.
-			panic("< redirection not implemented");
 			break;
 
 		case '>':	// Output redirection

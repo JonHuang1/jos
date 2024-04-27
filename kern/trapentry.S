@@ -68,7 +68,7 @@ TRAPHANDLER_NOEC(t_fperr, T_FPERR);
 TRAPHANDLER(t_align, T_ALIGN);
 TRAPHANDLER_NOEC(t_mchk, T_MCHK);
 TRAPHANDLER_NOEC(t_simderr, T_SIMDERR);
-// Unsure about syscall and default
+# Unsure about syscall and default
 TRAPHANDLER_NOEC(t_syscall, T_SYSCALL);
 TRAPHANDLER_NOEC(irq_timer, IRQ_OFFSET + IRQ_TIMER);
 TRAPHANDLER_NOEC(irq_error, IRQ_OFFSET + IRQ_ERROR);
