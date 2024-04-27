@@ -1,0 +1,1 @@
+1. The IOPL level is contained within the EFLAGS register, which is saved and restored through the trapframe during register switching as part of the context-switch process.
