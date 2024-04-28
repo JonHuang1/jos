@@ -70,7 +70,7 @@ alloc_block(void)
 			return block;
 		}
 	}
-	return -E_NO_DISK;
+	return -E_NO_DISK; 
 }
 
 // Validate the file system bitmap.
@@ -205,8 +205,6 @@ file_get_block(struct File *f, uint32_t filebno, char **blk)
 		if (r < 0) {
 			return -E_NO_DISK;
 		}
-		memset(diskaddr(r), 0, BLKSIZE);
-		flush_block(diskaddr(r));
 		*ppdiskbno = r;
 	}
 	*blk = diskaddr(*ppdiskbno);
